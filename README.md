@@ -1,3 +1,19 @@
+# YQH 工具箱 · 在线工具集（PHP 版）
+
+基于 ThinkPHP 5.1 的服务端在线工具集，包含 JSON 格式化、加解密、编码转换、文本处理、
+站长工具等 100+ 个小工具。
+
+- 源码仓库：<https://github.com/yqh-core/yqh-php-tool>
+- 运行环境：PHP 7.4 + Apache/Nginx（**不能**部署到 Cloudflare Pages，那里只跑静态资源）
+
+## 本次改造要点
+
+- 站点标题统一为 **YQH 工具箱**（`config/web.php` 共 164 处）
+- 页脚去掉虚构的 ICP 备案号，改为指向本项目源码
+- 友情链接换成同站自有项目
+- `canonical` 原本写死 `http://127.0.0.1:8008`，改为留空并标注 TODO —— 部署后填正式域名
+
+---
 
 ## 技术栈
 
