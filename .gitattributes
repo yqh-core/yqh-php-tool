@@ -1,0 +1,21 @@
+# 仓库内一律存 LF
+* text=auto
+
+# qqwry.dat 是纯真 IP 数据库的二进制文件（约 10 MiB）
+# 必须标 binary，否则 git 会尝试做行尾转换并把它当成文本 diff
+qqwry.dat binary
+*.dat     binary
+
+*.ico  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.woff  binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
+*.zip  binary
+
+# 行尾有语义的文件钉死 LF
+.htaccess text eol=lf

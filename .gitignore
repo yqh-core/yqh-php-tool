@@ -1,0 +1,17 @@
+/.idea
+/.vscode
+/vendor
+*.log
+.env
+.DS_Store
+runtime/*
+
+# 站点 TLS 证书与私钥。ssl/nginx/*.key 是**真实 RSA 私钥**，
+# 私钥进公开仓库等于证书作废，一律不进版本库。
+# 证书应当只存在于服务器上（nginx 从服务器本地读取）。
+/ssl
+
+# 后台管理员 QQ 白名单，含个人信息。
+# 需要改配置时复制 config/admin.php.example 为 config/admin.php。
+/config/admin.php
+/config/admin.php.bak

@@ -1,0 +1,8 @@
+<?php
+// 后台可登录的 QQ 白名单。复制本文件为 config/admin.php 后填入你自己的 QQ。
+// config/admin.php 已被 .gitignore 排除，真实配置不会进版本库。
+return [
+    'Administrator' => [
+        '100000',//填写你的QQ
+    ]
+];

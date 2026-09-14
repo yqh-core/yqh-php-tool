@@ -1,0 +1,63 @@
+name: php-lint
+
+# php_tool 是服务端 PHP 应用（ThinkPHP 5.1 + qqwry.dat），不能部署到
+# Cloudflare Pages —— 那里只跑静态资源。所以本站点的流水线只做质量门禁：
+# 语法检查 + 敏感文件守护。真正的运行环境是 Apache/Nginx + PHP。
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    # 钉 22.04：PHP 7.4 在 jammy 上的软件源最稳
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+
+      - name: 语法检查（php -l）
+        run: |
+          set -uo pipefail
+          fail=0
+          count=0
+          while IFS= read -r -d '' f; do
+            count=$((count + 1))
+            if ! php -l "$f"; then
+              fail=1
+            fi
+          done < <(git ls-files -z '*.php')
+          echo "共检查 $count 个 PHP 文件"
+          exit $fail
+
+      - name: 敏感文件守护
+        run: |
+          set -euo pipefail
+
+          # TLS 私钥绝不能进版本库
+          if git ls-files | grep -qE '\.key$'; then
+            echo "::error::检测到私钥类文件已入库:"; git ls-files | grep -E '\.key$'
+            exit 1
+          fi
+
+          # 后台管理员配置应只提交 .example 模板
+          if git ls-files | grep -qE '^config/admin\.php(\.bak)?$'; then
+            echo "::error::config/admin.php 含个人信息，不应入库（提交 admin.php.example 即可）"
+            exit 1
+          fi
+
+          # vendor/ 由 composer 在部署时安装
+          if git ls-files | grep -qE '^vendor/'; then
+            echo "::error::vendor/ 不应入库"
+            exit 1
+          fi
+
+          echo "OK 未发现不该入库的敏感文件"
